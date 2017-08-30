@@ -4,12 +4,12 @@
 
 class Transaction:
 
-    def __init__(self):
+    def __init__(self, date:str, name:str, description:str, amount:float):
 
-        self.date = None
-        self.name = None
-        self.type = None
-        self.amount = 0.0
+        self.date = date
+        self.name = name
+        self.description = description
+        self.amount = amount
 
     def _amount(self):
         return self.amount
@@ -20,5 +20,5 @@ class Transaction:
     def _name(self):
         return self.name
 
-    def _type(self):
-        return self.type
+    def _description(self):
+        return self.description
