@@ -22,7 +22,6 @@ class Account:
         self.name = name
         self.balance = startingBalance
         self.transactions = []
-        self.balanceHistory = []
 
     # ------------------------------------------------------------------
 
@@ -35,7 +34,6 @@ class Account:
         """
 
         self.transactions.append(trans)
-        self.balance += trans._amount()
 
     # ------------------------------------------------------------------
 
@@ -82,14 +80,16 @@ class Account:
 
         print(self.name, self.balance)
         print('-'*78)
+        runningBalance = self.balance
         for i in self.transactions:
             print(i._date(), i._name(), i._description(), end=' ')
             amount = i._amount()
+            runningBalance += amount
             if amount < 0:
                 print(amount * -1, end=' ')
             else:
                 print(amount, end=' ')
-            print(self.balance)
+            print(runningBalance)
             print('-' * 78)
         return ''
 
