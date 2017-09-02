@@ -44,7 +44,11 @@ class Account:
         :return: None
         """
 
-        pass
+        outfile = open(filename, 'w')
+        print(self.name + '|' + str(self.balance), file=outfile)
+        for i in self.transactions:
+            print(i._date() + '|' + i._name() + '|' + i._description() + '|' + str(i._amount()), file=outfile)
+        outfile.close()
 
     # ------------------------------------------------------------------
 
@@ -57,7 +61,19 @@ class Account:
         :return: Account object with information from the file
         """
 
-        pass
+        infile = open(filename, 'r')
+        newA = infile.readline()
+        newA = newA.split('|')
+        newA = Account(newA[0], float(newA[1]))
+        trans = infile.readlines()
+        for i in trans:
+            t = i.split('|')
+            t = Transaction(t[0], t[1], t[2], float(t[3]))
+            newA.addTransaction(t)
+        infile.close()
+        return newA
+
+
 
     # ------------------------------------------------------------------
 
@@ -78,20 +94,23 @@ class Account:
         each transaction is on its own line and separated by 78 dashes
         """
 
-        print(self.name, self.balance)
-        print('-'*78)
+        details = []
+        details.append(self.name)
+        details.append(' {0:0.2f}\n'.format(self.balance))
         runningBalance = self.balance
         for i in self.transactions:
-            print(i._date(), i._name(), i._description(), end=' ')
+            details.append(('-' * 78) + "\n")
+            details.append("{0:<11}{1:<6}{2:<25}".format(i._date(), i._name(), i._description()))
             amount = i._amount()
             runningBalance += amount
             if amount < 0:
-                print(amount * -1, end=' ')
+                details.append("{0:>24.2f}".format(amount * -1))
             else:
-                print(amount, end=' ')
-            print(runningBalance)
-            print('-' * 78)
-        return ''
+                details.append("{0:>12.2f}            ".format(amount))
+            details.append("{0:>12.2f}\n".format(runningBalance))
+        details.append('-' * 78)
+        details = ''.join(details)
+        return details
 
     # ------------------------------------------------------------------
 
@@ -104,9 +123,9 @@ def main():
     a.writeToFile("data.txt")
     print(a)
 
-    #b = Account.readFromFile('data.txt')
-    #print()
-    #print(b)
+    b = Account.readFromFile('data.txt')
+    print()
+    print(b)
 
 if __name__ == '__main__':
     main()
