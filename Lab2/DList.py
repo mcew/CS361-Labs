@@ -28,11 +28,13 @@ class DList:
     def __init__(self, seq=None):
 
         '''creates an empty list'''
-
+        
+        # intialize instance variables of linked list
         self.head = None
         self.tail = None
         self.size = 0
 
+        # If passed a sequence, place items in list 
         if seq is not None:
             for i in seq:
                 self.append(i)
@@ -43,6 +45,7 @@ class DList:
 
         '''returns number of items in the list'''
 
+        # returns the instancec variable, size
         return self.size
 
     # ------------------------------------------------------------------
@@ -51,9 +54,13 @@ class DList:
 
         '''forward iterator'''
 
+        # set node to head
         node = self.head
+  
         while node is not None:
+            # yield the node's item
             yield node.item
+            # the next node becomes node and loops back to the while statement
             node = node.next
 
     # ------------------------------------------------------------------
@@ -66,21 +73,32 @@ class DList:
         for negative positions, -1 is the last item -size is the first
         item'''
 
+        # if the head contains something
         if self.head:
-            if position >= 0 and position < self.size:
+            # if the position is greater than or equal to 0 and the position is smaller than the size
+            if position >= 0 and position < self.size: 
+                # set node as first of list
                 node = self.head
+                # iterate through the list based on parameter, position
                 for i in range(position):
+                    # next node becomes node
                     node = node.next
                 return node
+            # else if the position is less than 0 and the position is greater than or equal to negative-size
             elif position < 0 and position >= -self.size:
+                # set self.tail as node
                 node = self.tail
+                # iterate through the list starting from end 
                 for i in range(-position):
+                    # set node as previous node
                     node = node.prev
                 return node
             else:
-                raise ValueError
+                # if position is not given raise ValueError
+                raise IndexError
         else:
-            raise ValueError
+            # else the position is not a valid index of the list
+            raise IndexErrorr
 
     # ------------------------------------------------------------------
 
@@ -88,6 +106,7 @@ class DList:
 
         '''return data item at location position'''
 
+        # utilize find method to retrieve node at position 
         node = self._find(position)
         return node.item
 
@@ -97,7 +116,9 @@ class DList:
 
         '''set data item at location position to value'''
 
+        # utilize find method to retrieve node at the position
         node = self._find(position)
+        # set the item of that node to the value
         node.item = value
 
     # ------------------------------------------------------------------
@@ -105,7 +126,8 @@ class DList:
     def __delitem__(self, position):
 
         '''delete item at location position from the list'''
-
+        
+        # utilize the delete method 
         self._delete(position)
 
     # ------------------------------------------------------------------
@@ -113,25 +135,40 @@ class DList:
     def _delete(self, position):
 
         '''private method to delete item at location position from the list'''
-
+        
+        # if there is something at the head
         if self.head:
+            # set the node as the found node at position
             node = self._find(position)
+            # if the size of list is 1
             if self.size == 1:
+                # set the head and tail as none 
                 self.head = None
                 self.tail = None
+            # else if the node is the head    
             elif node is self.head:
+                # set the next node's, after head, previous link to None
+                # this removes the head
                 node.next.prev = None
+                # self.head becomes what was the node after head
                 self.head = node.next
             elif node is self.tail:
+                # set the previous node's next link of the tail to None
+                # this removes the tail
                 node.prev.next = None
+                # the tail is now set as the node that was before the tail
                 self.tail = node.prev
             else:
+                # else the node is not the only item in list, or the head, or the tail
+                # setting the previous node's next link to the node after found-node
                 node.prev.next = node.next
                 node.next.prev = node.prev
+            # subtract one from the size 
             self.size -= 1
             return node.item
         else:
-            raise ValueError
+            # else the position is not a valid index of the list
+            raise IndexError
 
     # ------------------------------------------------------------------
 
